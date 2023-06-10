@@ -1,45 +1,47 @@
 "use client";
+import { ReactNode, createContext, useContext, useState } from "react";
 
-import Link from "next/link";
-import Image from "next/image";
+const NavContext = createContext({
+  show: false,
+  showHandler: (status?: boolean) => {},
+});
 
-import { NavProvider } from "./nav_context";
-import { NavNode, NavRoute } from "./nav_routes";
+function NavItem({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  const { show, showHandler } = useContext(NavContext);
 
-function Logo() {
+  const clickHandler = () => showHandler(false);
+
   return (
-    <Link href="/" className="navbar-brand">
-      <Image src="" width={40} height={40} alt="ETEFORM" />
-    </Link>
+    <li className={className ?? ""} onClick={clickHandler}>
+      {children}
+    </li>
   );
 }
 
-function Toggler() {
-  return (
-    <button
-      className="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavDropdown"
-      aria-controls="navbarNavDropdown"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span className="navbar-toggler-icon"></span>
-    </button>
-  );
-}
-
-function NavList({ navRoutes }: { navRoutes: NavNode }): JSX.Element {
-  return <ul className="navbar-nav"></ul>;
-}
-
-function Nav() {
+function Navbar({ list }: { list: any[] }) {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        <Logo />
-        <Toggler />
+        <a className="navbar-brand" href="#">
+          Navbar
+        </a>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav">
             <li className="nav-item">
@@ -52,11 +54,11 @@ function Nav() {
                 Features
               </a>
             </li>
-            <li className="nav-item">
+            <NavItem className="nav-item">
               <a className="nav-link" href="#">
                 Pricing
               </a>
-            </li>
+            </NavItem>
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
@@ -68,11 +70,11 @@ function Nav() {
                 Dropdown link
               </a>
               <ul className="dropdown-menu">
-                <li>
+                <NavItem>
                   <a className="dropdown-item" href="#">
                     Action
                   </a>
-                </li>
+                </NavItem>
                 <li>
                   <a className="dropdown-item" href="#">
                     Another action
@@ -92,10 +94,14 @@ function Nav() {
   );
 }
 
-export function Navbar() {
+export default function NavProvider({ list }: { list: any[] }) {
+  const [show, setShow] = useState(false);
+  const stateCallback = (status?: boolean) => (currentState: boolean) =>
+    status ?? !currentState;
+  const showHandler = (status?: boolean) => setShow(stateCallback(status));
   return (
-    <NavProvider>
-      <Nav />
-    </NavProvider>
+    <NavContext.Provider value={{ show, showHandler }}>
+      <Navbar list={list} />
+    </NavContext.Provider>
   );
 }

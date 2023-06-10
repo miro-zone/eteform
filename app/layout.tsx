@@ -1,7 +1,6 @@
+import  Navbar  from "./_navbar/Navbar";
 import "./globals.css";
 import { Noto_Kufi_Arabic } from "next/font/google";
-
-import { Navbar } from "./_navbar/navbar";
 
 const noto = Noto_Kufi_Arabic({ subsets: ["arabic"] });
 
@@ -18,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className={noto.className}>
-        <Navbar />
+        <Navbar list={[]} />
         {children}
       </body>
     </html>
