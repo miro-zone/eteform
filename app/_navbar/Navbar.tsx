@@ -1,5 +1,12 @@
 "use client";
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+  MouseEventHandler,
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+} from "react";
+import { Dropdown } from "../components/Dropdown";
 
 const NavContext = createContext({
   show: false,
@@ -13,7 +20,7 @@ function NavItem({
   children: ReactNode;
   className?: string;
 }) {
-  const { show, showHandler } = useContext(NavContext);
+  const { showHandler } = useContext(NavContext);
 
   const clickHandler = () => showHandler(false);
 
@@ -24,7 +31,22 @@ function NavItem({
   );
 }
 
+function NavLink() {}
+
 function Navbar({ list }: { list: any[] }) {
+  const Toggler = ({ onClick }: { onClick: MouseEventHandler }) => {
+    return (
+      <a
+        className="nav-link dropdown-toggle"
+        href="#"
+        role="button"
+        aria-expanded="false"
+        onClick={onClick}
+      >
+        Dropdown link
+      </a>
+    );
+  };
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -35,8 +57,6 @@ function Navbar({ list }: { list: any[] }) {
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
@@ -60,7 +80,7 @@ function Navbar({ list }: { list: any[] }) {
               </a>
             </NavItem>
             <li className="nav-item dropdown">
-              <a
+              {/* <a
                 className="nav-link dropdown-toggle"
                 href="#"
                 role="button"
@@ -68,8 +88,9 @@ function Navbar({ list }: { list: any[] }) {
                 aria-expanded="false"
               >
                 Dropdown link
-              </a>
-              <ul className="dropdown-menu">
+              </a> */}
+              {/* <ul className="dropdown-menu "> */}
+              <Dropdown Toggler={Toggler}>
                 <NavItem>
                   <a className="dropdown-item" href="#">
                     Action
@@ -85,7 +106,8 @@ function Navbar({ list }: { list: any[] }) {
                     Something else here
                   </a>
                 </li>
-              </ul>
+              </Dropdown>
+              {/* </ul> */}
             </li>
           </ul>
         </div>
