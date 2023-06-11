@@ -1,4 +1,5 @@
-import  Navbar  from "./_navbar/Navbar";
+import { Navbar } from "./_navbar/navbar";
+import { NavbarProvider } from "./_navbar/navbar_context";
 import "./globals.css";
 import { Noto_Kufi_Arabic } from "next/font/google";
 
@@ -17,7 +18,28 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className={noto.className}>
-        <Navbar list={[]} />
+        <NavbarProvider>
+          <Navbar
+            routes={[
+              { content: { title: "الرئيسية" }, href: "/" },
+              {
+                content: { title: "الخدمات" },
+                routes: [
+                  { href: "/services/1", content: { title: "الخدمة الاولي" } },
+                  {
+                    content: { title: "الخدمات المميزه" },
+                    routes: [
+                      {
+                        href: "/services/1/vip",
+                        content: { title: "وصف الخدمة الاولي" },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ]}
+          />
+        </NavbarProvider>
         {children}
       </body>
     </html>
